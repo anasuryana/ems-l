@@ -22,4 +22,5 @@ Route::prefix('device-master')->group(function () {
     Route::get('', [DeviceController::class, 'getDevice']);
     Route::post('', [DeviceController::class, 'saveDevice']);
     Route::put('', [DeviceController::class, 'updateDevice']);
+    Route::delete('', [DeviceController::class, 'deleteDevice']);
 });

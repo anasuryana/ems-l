@@ -14,12 +14,16 @@ class DeviceController extends Controller
         switch ($request->searchBy) {
             case 'txIP':
                 $additionalWhere[] = ['IP_device_tx', 'like', '%' . $request->searchValue . '%'];
+                break;
             case 'rxIP':
                 $additionalWhere[] = ['IP_device_rx', 'like', '%' . $request->searchValue . '%'];
+                break;
             case 'model':
                 $additionalWhere[] = ['model', 'like', '%' . $request->searchValue . '%'];
+                break;
             case 'line':
                 $additionalWhere[] = ['line_name', 'like', '%' . $request->searchValue . '%'];
+                break;
         }
         $data = DB::table('tbl_devices')
             ->where($additionalWhere)->get();
@@ -71,5 +75,20 @@ class DeviceController extends Controller
         ]);
 
         return ['message' => 'Updated successfully'];
+    }
+
+    public function deleteDevice(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 406);
+        }
+
+        DB::table('tbl_devices')->where('id', $request->id)->delete();
+
+        return ['message' => 'Deleted successfully'];
     }
 }
