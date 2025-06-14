@@ -21,4 +21,5 @@ Route::prefix('report')->group(function () {
 Route::prefix('device-master')->group(function () {
     Route::get('', [DeviceController::class, 'getDevice']);
     Route::post('', [DeviceController::class, 'saveDevice']);
+    Route::put('', [DeviceController::class, 'updateDevice']);
 });
