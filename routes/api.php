@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -30,4 +31,11 @@ Route::prefix('sms-master')->group(function () {
     Route::post('', [SMSController::class, 'save']);
     Route::put('', [SMSController::class, 'update']);
     Route::delete('', [SMSController::class, 'delete']);
+});
+
+Route::prefix('role-access')->group(function () {
+    Route::get('', [RoleController::class, 'search']);
+    Route::post('', [RoleController::class, 'save'])->middleware('auth:sanctum');
+    Route::put('', [RoleController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('', [RoleController::class, 'delete'])->middleware('auth:sanctum');
 });
