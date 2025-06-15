@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\SMSController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,10 @@ Route::prefix('device-master')->group(function () {
     Route::post('', [DeviceController::class, 'saveDevice']);
     Route::put('', [DeviceController::class, 'updateDevice']);
     Route::delete('', [DeviceController::class, 'deleteDevice']);
+});
+Route::prefix('sms-master')->group(function () {
+    Route::get('', [SMSController::class, 'search']);
+    Route::post('', [SMSController::class, 'save']);
+    Route::put('', [SMSController::class, 'update']);
+    Route::delete('', [SMSController::class, 'delete']);
 });
