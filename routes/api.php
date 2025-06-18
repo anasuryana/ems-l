@@ -39,3 +39,10 @@ Route::prefix('role-access')->group(function () {
     Route::put('', [RoleController::class, 'update'])->middleware('auth:sanctum');
     Route::delete('', [RoleController::class, 'delete'])->middleware('auth:sanctum');
 });
+Route::prefix('user-access')->group(function () {
+    Route::get('', [UserController::class, 'search']);
+    Route::post('', [UserController::class, 'save'])->middleware('auth:sanctum');
+    Route::put('', [UserController::class, 'update']);
+    Route::put('activation', [UserController::class, 'updateActivation']);
+    Route::delete('', [UserController::class, 'delete'])->middleware('auth:sanctum');
+});
