@@ -83,14 +83,14 @@ class UserController extends Controller
             return response()->json($validator->errors(), 406);
         }
 
-        DB::table('roles')->insert([
+        DB::table('users')->insert([
             'name' => $request->name,
             'nick_name' => $request->nick_name,
             'password' => Hash::make($request->password),
             'active' => '1',
             'role_id' => $request->role_id,
-            'created_at' => date('Y-m-d H:i:s'),
-            'created_by' => $request->user()->nick_name
+            'email' => $request->nick_name . '@local.dev',
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         return ['message' => 'Saved successfully'];
@@ -145,7 +145,7 @@ class UserController extends Controller
             return response()->json($validator->errors(), 406);
         }
 
-        DB::table('roles')->where('id', $request->id)->update([
+        DB::table('users')->where('id', $request->id)->update([
             'deleted_at' => date('Y-m-d H:i:s'),
         ]);
 
