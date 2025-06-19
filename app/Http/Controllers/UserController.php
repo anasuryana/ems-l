@@ -100,19 +100,27 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'nick_name' => 'required',
+            'role_id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 406);
         }
 
-        DB::table('roles')->where('id', $request->id)->update([
+        $affectedRows = DB::table('users')->where('nick_name', $request->nick_name)->update([
             'name' => $request->name,
             'updated_at' => date('Y-m-d H:i:s'),
             'role_id' => $request->role_id
         ]);
 
-        return ['message' => 'Updated successfully'];
+        if (!empty($request->password)) {
+            $affectedRows += DB::table('users')->where('nick_name', $request->nick_name)->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        return ['message' => 'Updated successfully ' . ($affectedRows > 1 ? '..' : '.')];
     }
 
     public function updateActivation(Request $request)
