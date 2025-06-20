@@ -35,6 +35,7 @@ Route::prefix('sms-master')->group(function () {
 
 Route::prefix('role-access')->group(function () {
     Route::get('', [RoleController::class, 'search']);
+    Route::get('list', [RoleController::class, 'getRole']);
     Route::post('', [RoleController::class, 'save'])->middleware('auth:sanctum');
     Route::put('', [RoleController::class, 'update'])->middleware('auth:sanctum');
     Route::delete('', [RoleController::class, 'delete'])->middleware('auth:sanctum');

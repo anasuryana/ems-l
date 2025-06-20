@@ -17,6 +17,19 @@ class RoleController extends Controller
                 break;
         }
         $data = DB::table('roles')
+            ->where($additionalWhere)->whereNull('deleted_at')->paginate(500);
+        return ['data' => $data];
+    }
+
+    public function getRole(Request $request)
+    {
+        $additionalWhere = [];
+        switch ($request->searchBy) {
+            case 'name':
+                $additionalWhere[] = ['name', 'like', '%' . $request->searchValue . '%'];
+                break;
+        }
+        $data = DB::table('roles')
             ->where($additionalWhere)->whereNull('deleted_at')->get();
         return ['data' => $data];
     }
