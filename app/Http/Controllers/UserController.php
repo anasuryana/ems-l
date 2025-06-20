@@ -56,7 +56,7 @@ class UserController extends Controller
         }
         $data = DB::table('users')
             ->leftJoin('roles', 'role_id', '=', 'roles.id')
-            ->where($additionalWhere)->whereNull('deleted_at')
+            ->where($additionalWhere)->whereNull('users.deleted_at')
             ->select(
                 "users.id",
                 "users.name",
@@ -155,6 +155,7 @@ class UserController extends Controller
 
         DB::table('users')->where('id', $request->id)->update([
             'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => $request->user()->nick_name
         ]);
 
         return ['message' => 'Deleted successfully'];
