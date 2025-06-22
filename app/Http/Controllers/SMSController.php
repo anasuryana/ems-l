@@ -41,7 +41,7 @@ class SMSController extends Controller
 
         DB::table('tbl_user_sms')->insert([
             'name' => $request->name,
-            'telp_no' => $request->telp_no,
+            'telp_no' => str_replace([" ", "-"], "", $request->telp_no),
             'status' => $request->status,
         ]);
 
@@ -63,7 +63,7 @@ class SMSController extends Controller
 
         DB::table('tbl_user_sms')->where('id_user', $request->id_user)->update([
             'name' => $request->name,
-            'telp_no' => $request->telp_no,
+            'telp_no' => str_replace([" ", "-"], "", $request->telp_no),
             'status' => $request->status,
         ]);
 
