@@ -23,7 +23,7 @@ class SMSController extends Controller
                 break;
         }
         $data = DB::table('tbl_user_sms')
-            ->where($additionalWhere)->get();
+            ->where($additionalWhere)->paginate(500);
         return ['data' => $data];
     }
 
@@ -61,7 +61,7 @@ class SMSController extends Controller
             return response()->json($validator->errors(), 406);
         }
 
-        DB::table('tbl_user_sms')->where('id', $request->id_user)->update([
+        DB::table('tbl_user_sms')->where('id_user', $request->id_user)->update([
             'name' => $request->name,
             'telp_no' => $request->telp_no,
             'status' => $request->status,
