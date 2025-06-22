@@ -33,8 +33,8 @@ class DeviceController extends Controller
     public function saveDevice(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'IP_device_tx' => 'required',
-            'IP_device_rx' => 'required',
+            'IP_device_tx' => 'required|ip',
+            'IP_device_rx' => 'required|ip',
             'model' => 'required',
             'line_name' => 'required',
         ]);
@@ -56,8 +56,8 @@ class DeviceController extends Controller
     public function updateDevice(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'IP_device_tx' => 'required',
-            'IP_device_rx' => 'required',
+            'IP_device_tx' => 'required|ip',
+            'IP_device_rx' => 'required|ip',
             'model' => 'required',
             'line_name' => 'required',
             'id' => 'required'
