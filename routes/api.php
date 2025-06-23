@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\UserController;
@@ -46,4 +47,7 @@ Route::prefix('user-access')->group(function () {
     Route::put('', [UserController::class, 'update']);
     Route::put('activation', [UserController::class, 'updateActivation']);
     Route::delete('', [UserController::class, 'delete'])->middleware('auth:sanctum');
+});
+Route::prefix('report')->group(function () {
+    Route::get('report1', [ReportController::class, 'report1']);
 });
