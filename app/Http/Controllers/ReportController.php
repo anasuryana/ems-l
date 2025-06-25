@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class ReportController extends Controller
 {
@@ -37,5 +39,51 @@ class ReportController extends Controller
         }
 
         return ['data' => $data, 'dataStatus' => $dataStatusResume];
+    }
+
+    function toSpreadsheet(Request $request)
+    {
+
+        $data = DB::table('tbl_pcb_logs')
+            ->where('date', '>=', $request->dateFrom ?? '2000-01-01')
+            ->where('date', '<=', $request->dateTo ?? '2025-06-01')
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get();
+
+
+        $spreadSheet = new Spreadsheet();
+        $sheet = $spreadSheet->getActiveSheet();
+        $sheet->setTitle('Log');
+        $sheet->setCellValue([1, 1], '#');
+        $sheet->setCellValue([2, 1], 'Date');
+        $sheet->setCellValue([3, 1], 'Time');
+        $sheet->setCellValue([4, 1], 'Line Number');
+        $sheet->setCellValue([5, 1], 'Status');
+
+        $i = 2;
+        foreach ($data as $r) {
+            $sheet->setCellValue([1, $i], $i - 1);
+            $sheet->setCellValue([2, $i], $r->date);
+            $sheet->setCellValue([3, $i], $r->time);
+            $sheet->setCellValue([4, $i], $r->line_name);
+            $sheet->setCellValue([5, $i], $r->status);
+
+            $i++;
+        }
+
+        foreach (range('A', 'E') as $v) {
+            $sheet->getColumnDimension($v)->setAutoSize(true);
+        }
+
+        $sheet->freezePane('A2');
+
+        $stringjudul = "Logs, " . date('H:i:s');
+        $filename = $stringjudul;
+
+        $writer = IOFactory::createWriter($spreadSheet, 'Csv');
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="' . $filename . '.csv"');
+        $writer->save('php://output');
     }
 }

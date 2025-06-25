@@ -50,4 +50,5 @@ Route::prefix('user-access')->group(function () {
 });
 Route::prefix('report')->group(function () {
     Route::get('report1', [ReportController::class, 'report1']);
+    Route::get('report1-to-spreadsheet', [ReportController::class, 'toSpreadsheet']);
 });
