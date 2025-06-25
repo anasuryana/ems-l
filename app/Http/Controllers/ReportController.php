@@ -32,7 +32,7 @@ class ReportController extends Controller
 
             $_dataRetryo = $dataStatusResumeo->where('status', 'Yellow')->first();
             if (!empty($_dataRetryo)) {
-                $dataStatusResume['ng'] = $_dataRetryo->ttl_qty;
+                $dataStatusResume['retry'] = $_dataRetryo->ttl_qty;
             }
         }
 
