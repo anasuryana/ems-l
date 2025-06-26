@@ -32,6 +32,7 @@ class DashboardController extends Controller
                 )
                 ->orderBy('date', 'desc')
                 ->orderBy('time', 'desc')
+                ->orderBy('id', 'desc')
                 ->first();
         } else {
             $latestdataDB = DB::table('tbl_pcb_logs')
@@ -39,6 +40,7 @@ class DashboardController extends Controller
                 ->where('line_name', $dataLine->line_name ?? '')
                 ->orderBy('date', 'desc')
                 ->orderBy('time', 'desc')
+                ->orderBy('id', 'desc')
                 ->first();
         }
 
