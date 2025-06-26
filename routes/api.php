@@ -20,6 +20,9 @@ Route::prefix('users')->group(function () {
 
 Route::prefix('report')->group(function () {
     Route::get('chart1', [DashboardController::class, 'getChart1Data']);
+    Route::get('detail', [DashboardController::class, 'getDetail']);
+    Route::get('report1', [ReportController::class, 'report1']);
+    Route::get('report1-to-spreadsheet', [ReportController::class, 'toSpreadsheet']);
 });
 Route::prefix('device-master')->group(function () {
     Route::get('', [DeviceController::class, 'getDevice']);
@@ -47,8 +50,4 @@ Route::prefix('user-access')->group(function () {
     Route::put('', [UserController::class, 'update']);
     Route::put('activation', [UserController::class, 'updateActivation']);
     Route::delete('', [UserController::class, 'delete'])->middleware('auth:sanctum');
-});
-Route::prefix('report')->group(function () {
-    Route::get('report1', [ReportController::class, 'report1']);
-    Route::get('report1-to-spreadsheet', [ReportController::class, 'toSpreadsheet']);
 });

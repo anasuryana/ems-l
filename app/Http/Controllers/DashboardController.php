@@ -66,4 +66,16 @@ class DashboardController extends Controller
             'is_data_exist' => $isDataExist ? '1' : '0'
         ];
     }
+
+    function getDetail(Request $request)
+    {
+        $dataLine = DB::table('tbl_devices')->orderBy('id')->first();
+        $data = DB::table('tbl_pcb_logs')->where('date', date('Y-m-d'))
+            ->where('line_name', $dataLine->line_name ?? '')
+            ->where('status', $request->status)
+            ->orderBy('date')
+            ->orderBy('time')
+            ->paginate(10);
+        return ['data' => $data];
+    }
 }
