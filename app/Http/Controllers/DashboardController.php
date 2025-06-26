@@ -30,16 +30,6 @@ class DashboardController extends Controller
                 ->orderBy('date', 'desc')
                 ->orderBy('time', 'desc')
                 ->first();
-
-            $dataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
-                ->where('date', $latestdataDB->date)
-                ->groupBy(DB::raw('HOUR(time)'))
-                ->select(
-                    DB::raw("HOUR(TIME) time_"),
-                    DB::raw("SUM(case when status = 'Red' then  qty end) ng"),
-                    DB::raw("SUM(case when status = 'Yellow ' then  qty end) retry"),
-                    DB::raw("MAX(line_name) mline_name")
-                )->get();
         } else {
             $latestdataDB = DB::table('tbl_pcb_logs')
                 ->where('date', date('Y-m-d'))
