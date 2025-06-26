@@ -13,6 +13,7 @@ class DashboardController extends Controller
         $dataLine = DB::table('tbl_devices')->orderBy('id')->first();
         $dataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
             ->where('date', date('Y-m-d'))
+            ->where('line_name', $dataLine->line_name ?? '')
             ->groupBy(DB::raw('HOUR(time)'))
             ->select(
                 DB::raw("HOUR(TIME) time_"),
@@ -20,9 +21,11 @@ class DashboardController extends Controller
                 DB::raw("SUM(case when status = 'Yellow ' then  qty end) retry"),
                 DB::raw("MAX(line_name) mline_name"),
             )->get();
-
+        $isDataExist = true;
         if ($dataDB->count() == 0) {
-            $latestdataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
+            $isDataExist = false;
+            $latestdataDB = DB::table('tbl_pcb_logs')
+                ->where('line_name', $dataLine->line_name ?? '')
                 ->select(
                     'date',
                     'status'
@@ -33,6 +36,7 @@ class DashboardController extends Controller
         } else {
             $latestdataDB = DB::table('tbl_pcb_logs')
                 ->where('date', date('Y-m-d'))
+                ->where('line_name', $dataLine->line_name ?? '')
                 ->orderBy('date', 'desc')
                 ->orderBy('time', 'desc')
                 ->first();
@@ -58,7 +62,8 @@ class DashboardController extends Controller
         return [
             'data' => $data,
             'line_name' => $dataLine->line_name ?? '',
-            'last_status' => $latestdataDB->status
+            'last_status' => $latestdataDB->status,
+            'is_data_exist' => $isDataExist ? '1' : '0'
         ];
     }
 }
