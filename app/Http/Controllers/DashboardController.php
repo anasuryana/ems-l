@@ -10,6 +10,7 @@ class DashboardController extends Controller
     function getChart1Data()
     {
         $data = [];
+        $dataLine = DB::table('tbl_devices')->orderBy('id')->first();
         $dataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
             ->where('date', date('Y-m-d'))
             ->groupBy(DB::raw('HOUR(time)'))
@@ -21,13 +22,17 @@ class DashboardController extends Controller
             )->get();
 
         if ($dataDB->count() == 0) {
-            $lastDate = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
+            $latestdataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
                 ->select(
-                    'date'
-                )->orderBy('date', 'desc')->first();
+                    'date',
+                    'status'
+                )
+                ->orderBy('date', 'desc')
+                ->orderBy('time', 'desc')
+                ->first();
 
             $dataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
-                ->where('date', $lastDate->date)
+                ->where('date', $latestdataDB->date)
                 ->groupBy(DB::raw('HOUR(time)'))
                 ->select(
                     DB::raw("HOUR(TIME) time_"),
@@ -35,17 +40,19 @@ class DashboardController extends Controller
                     DB::raw("SUM(case when status = 'Yellow ' then  qty end) retry"),
                     DB::raw("MAX(line_name) mline_name")
                 )->get();
+        } else {
+            $latestdataDB = DB::table('tbl_pcb_logs')
+                ->where('date', date('Y-m-d'))
+                ->orderBy('date', 'desc')
+                ->orderBy('time', 'desc')
+                ->first();
         }
 
-        $line_name = '';
-
         for ($i = 0; $i <= 24; $i++) {
-
             $startHour = substr('0' . $i, -2);
             $ng = $retry = 0;
             foreach ($dataDB as $r) {
                 if (substr($startHour, 0, 2) == substr($r->time_, 0, 2)) {
-                    $line_name = $r->mline_name;
                     $ng = $r->ng ?? 0;
                     $retry = $r->retry ?? 0;
                     break;
@@ -58,6 +65,10 @@ class DashboardController extends Controller
             ];
         }
 
-        return ['data' => $data, 'line_name' => $line_name];
+        return [
+            'data' => $data,
+            'line_name' => $dataLine->line_name ?? '',
+            'last_status' => $latestdataDB->status
+        ];
     }
 }
