@@ -55,19 +55,19 @@ class ReportController extends Controller
         $spreadSheet = new Spreadsheet();
         $sheet = $spreadSheet->getActiveSheet();
         $sheet->setTitle('Log');
-        $sheet->setCellValue([1, 1], '#');
-        $sheet->setCellValue([2, 1], 'Date');
-        $sheet->setCellValue([3, 1], 'Time');
-        $sheet->setCellValue([4, 1], 'Line Number');
-        $sheet->setCellValue([5, 1], 'Status');
+        $sheet->setCellValue([1, 1], 'Date');
+        $sheet->setCellValue([2, 1], 'Time');
+        $sheet->setCellValue([3, 1], 'Line Number');
+        $sheet->setCellValue([4, 1], 'Status');
+        $sheet->setCellValue([5, 1], 'Qty');
 
         $i = 2;
         foreach ($data as $r) {
-            $sheet->setCellValue([1, $i], $i - 1);
-            $sheet->setCellValue([2, $i], $r->date);
-            $sheet->setCellValue([3, $i], $r->time);
-            $sheet->setCellValue([4, $i], $r->line_name);
-            $sheet->setCellValue([5, $i], $r->status);
+            $sheet->setCellValue([1, $i], $r->date);
+            $sheet->setCellValue([2, $i], $r->time);
+            $sheet->setCellValue([3, $i], $r->line_name);
+            $sheet->setCellValue([4, $i], $r->status);
+            $sheet->setCellValue([5, $i], $r->qty);
 
             $i++;
         }
