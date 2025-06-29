@@ -44,7 +44,7 @@ class DashboardController extends Controller
                 ->first();
         }
 
-        for ($i = 0; $i <= 24; $i++) {
+        for ($i = 0; $i <= 23; $i++) {
             $startHour = substr('0' . $i, -2);
             $ng = $retry = 0;
             foreach ($dataDB as $r) {
