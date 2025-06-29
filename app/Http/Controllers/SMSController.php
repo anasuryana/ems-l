@@ -23,7 +23,7 @@ class SMSController extends Controller
                 break;
         }
         $data = DB::table('tbl_user_sms')
-            ->where($additionalWhere)->paginate(500);
+            ->where($additionalWhere)->paginate(10);
         return ['data' => $data];
     }
 

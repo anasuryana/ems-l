@@ -17,7 +17,7 @@ class RoleController extends Controller
                 break;
         }
         $data = DB::table('roles')
-            ->where($additionalWhere)->whereNull('deleted_at')->paginate(500);
+            ->where($additionalWhere)->whereNull('deleted_at')->paginate(10);
         return ['data' => $data];
     }
 

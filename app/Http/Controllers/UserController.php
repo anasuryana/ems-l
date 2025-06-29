@@ -67,7 +67,7 @@ class UserController extends Controller
                 "active",
                 DB::raw("roles.name as role_name")
             )->orderBy('users.name');
-        return ['data' => $data->paginate(500)];
+        return ['data' => $data->paginate(10)];
     }
 
     public function save(Request $request)
