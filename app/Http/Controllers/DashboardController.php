@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $data = [];
         $dataLine = DB::table('tbl_devices')->orderBy('id')->first();
-        $dataDB = DB::table('tbl_pcb_logs')->where('status', '!=', 'Off')
+        $dataDB = DB::table('tbl_pcb_logs')->whereNotIn('status', ['Off', 'Green'])
             ->where('date', date('Y-m-d'))
             ->where('line_name', $dataLine->line_name ?? '')
             ->groupBy(DB::raw('HOUR(time)'))
@@ -64,7 +64,7 @@ class DashboardController extends Controller
         return [
             'data' => $data,
             'line_name' => $dataLine->line_name ?? '',
-            'last_status' => $latestdataDB->status,
+            'last_status' => $latestdataDB->status ?? 'Off',
             'is_data_exist' => $isDataExist ? '1' : '0'
         ];
     }
