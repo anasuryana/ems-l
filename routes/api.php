@@ -7,10 +7,17 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $role = DB::table('roles')->where('id', $request->user()->role_id)->first();
+    return ['data' => [
+        'name' => $request->user()->name,
+        'nick_name' => $request->user()->nick_name,
+        'role_id' => $request->user()->role_id,
+        'role_name' => $role->name,
+    ]];
 })->middleware('auth:sanctum');
 
 
