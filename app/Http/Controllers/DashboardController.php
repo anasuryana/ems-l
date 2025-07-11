@@ -35,7 +35,6 @@ class DashboardController extends Controller
                 ->orderByDesc('time')
                 ->orderByDesc('id')
                 ->first();
-                
         } else {
             $lastData = DB::table('tbl_pcb_logs_real')
                 ->where('date', date('Y-m-d'))
@@ -66,17 +65,17 @@ class DashboardController extends Controller
         $status = null;
 
         if ($lastData) {
-            if ($lastData->qty_off == 1) {
+            if ($lastData->qty_off ?? 0 == 1) {
                 $status = 'Off';
-            } elseif ($lastData->qty_red > 0 && $lastData->qty_red >= $lastData->qty_yellow) {
+            } elseif ($lastData->qty_red ?? 0 > 0 && $lastData->qty_red ?? 0 >= $lastData->qty_yellow ?? 0) {
                 $status = 'Red';
-            } elseif ($lastData->qty_yellow > 0) {
+            } elseif ($lastData->qty_yellow ?? 0 > 0) {
                 $status = 'Yellow';
             } else {
                 $status = 'Green';
             }
         }
-        
+
         return [
             'data' => $data,
             'line_name' => $dataLine->line_name ?? '',
@@ -87,18 +86,6 @@ class DashboardController extends Controller
             'status' => $status
         ];
     }
-
-    // function getDetail(Request $request)
-    // {
-    //     $dataLine = DB::table('tbl_devices')->orderBy('id')->first();
-    //     $data = DB::table('tbl_pcb_logs')->where('date', date('Y-m-d'))
-    //         ->where('line_name', $dataLine->line_name ?? '')
-    //         ->where('status', $request->status)
-    //         ->orderBy('date')
-    //         ->orderBy('time')
-    //         ->paginate(10);
-    //     return ['data' => $data];
-    // }
 
     function getDetail(Request $request)
     {
